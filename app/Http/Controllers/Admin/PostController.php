@@ -179,6 +179,14 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        /***
+        NON DOBBIAMO AGGIUGNERE NIENTE perchè...
+        ...grazie al ->onDelete('cascade') quando eliminiamo un post o un tag in automatico viene eliminata anche la relazione cancellando il record dalla tabella ponte "post_tag"
+
+        SE INVECE ci fosse stato ->onDelete(setNull) dovevamo fare il detach() PRIMA del delete()
+        
+        ***/
+
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('deleted', 'Il post è stato eliminato correttamente');
