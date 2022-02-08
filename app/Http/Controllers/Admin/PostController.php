@@ -115,8 +115,10 @@ class PostController extends Controller
 
         $categories = Category::all();
 
+        $tags = Tag::all();
+
         if ($post) {
-            return view('admin.posts.edit', compact('post', 'categories'));
+            return view('admin.posts.edit', compact('post', 'categories', 'tags'));
         }
 
         abort(404, 'Il post è stato modificato, cancellato o la pagina non esiste più');
@@ -151,6 +153,20 @@ class PostController extends Controller
         }
 
         $post->update($post_data);
+
+        // verifico l'esistenza dell'chiave tags (che è un array) DENTRO all'array $post_data
+        // SE esite aggiorno le relazioni
+        // se non esiste cancello tutte le relazioni 
+        if (array_key_exists('tags', $post_data)) {
+            // SE esite eseguo il sync ( DA FARE DOPO ->update() )
+            // sync() sostituisce tutte le relazioni con quelle che vengono passate come parametro
+            $post->tags()->sync($post_data['tags']);
+        }else {
+            // se non viene inviato nessun tag devo cancellare tutte le relazioni
+            $post->tags()->sync([]);
+            // sync() ha la stessa funzione di detach() che però puo eliminare anche solo 1 relazione 
+            $post->tags()->detach();
+        }
 
         return redirect()->route('admin.posts.show', $post);
     }

@@ -38,13 +38,38 @@
     <div class="mb-3">
       <label for="category_id" class="form-label">Categoria</label>
       <select class="form-control" name="category_id" id="category_id">
-        <option>Selezionare una categoria</option>
+        <option value="">Selezionare una categoria</option>
           @foreach ($categories as $category)
             <option value="{{ $category->id }}" @if($category->id == old('category_id', $post->category_id)) selected @endif>
               {{ $category->name }}
             </option>
           @endforeach
       </select>
+    </div>
+
+    <div class="mb-3">
+      <h6>Tags</h6>
+      @forelse ($tags as $tag)
+        <div class="mr-5 d-inline-block">
+          <input class="form-check-input" type="checkbox" value="{{ $tag->id }}" name="tags[]" id="tag{{ $tag->id }}"
+          {{-- SE $tag->id è presente dentro ad old OPPURE SE la chiave tags (che è un array) contiene $tag->id cioè l'id che sto iterando --}}
+          {{-- ALLORA stampami "checked" dentro all'input --}}
+
+          {{-- SE al primo caricamento non ci sono errori stampo "checked" --}}
+          @if (!$errors->any() && $post->tags->contains($tag->id))
+              checked
+          {{-- SE INVECE ci sono errori "checked" viene stampato dalla regola data dall'old() --}}
+          @elseif ($errors->any() && in_array($tag->id, old('tags', [])))
+              checked
+          @endif
+          >
+          <label class="form-check-label" for="tag{{ $tag->id }}">
+            {{ $tag->name }}
+          </label>
+        </div>
+      @empty
+          -
+      @endforelse
     </div>
     
     <button type="submit" class="btn btn-success">Invia</button>
