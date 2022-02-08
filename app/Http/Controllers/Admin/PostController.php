@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Post;
 use App\Category;
+use App\Tag;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -37,7 +38,10 @@ class PostController extends Controller
     {
         $categories = Category::all();
 
-        return view('admin.posts.create', compact('categories'));
+        // recupero i tags esistenti
+        $tags = Tag::all();
+
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -71,6 +75,12 @@ class PostController extends Controller
         $new_post->slug = Post::generateSlug($new_post->title); // oppure anche data['title'];
         // dd($new_post); per vedere se arriva tutto correttamente
         $new_post->save();
+
+        // verifico l'esistenza dell'chiave tags (che è un array) DENTRO all'array $data
+        if (array_key_exists('tags', $data)) {
+            // SE esite eseguo l'attach ( DA FARE DOPO il ->save() )
+            $new_post->tags()->attach($data['tags']);
+        }
 
         return redirect()->route('admin.posts.show', $new_post);
     }

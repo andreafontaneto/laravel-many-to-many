@@ -38,13 +38,28 @@
     <div class="mb-3">
       <label for="category_id" class="form-label">Categoria</label>
       <select class="form-control" name="category_id" id="category_id">
-        <option selected>Selezionare una categoria</option>
+        <option value="" selected>Selezionare una categoria</option>
           @foreach ($categories as $category)
             <option value="{{ $category->id }}" @if($category->id == old('category_id')) selected @endif>
               {{ $category->name }}
             </option>
           @endforeach
       </select>
+    </div>
+
+    <div class="mb-3">
+      <h6>Tags</h6>
+      @forelse ($tags as $tag)
+        <div class="mr-5 d-inline-block">
+          <input class="form-check-input" type="checkbox" value="{{ $tag->id }}" name="tags[]" id="tag{{ $tag->id }}"
+          @if (in_array($tag->id, old('tags', []))) checked @endif>
+          <label class="form-check-label" for="tag{{ $tag->id }}">
+            {{ $tag->name }}
+          </label>
+        </div>
+      @empty
+          -
+      @endforelse
     </div>
     
     <button type="submit" class="btn btn-success">Invia</button>
