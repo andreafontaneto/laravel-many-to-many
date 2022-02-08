@@ -79,6 +79,7 @@ class PostController extends Controller
         // verifico l'esistenza dell'chiave tags (che è un array) DENTRO all'array $data
         if (array_key_exists('tags', $data)) {
             // SE esite eseguo l'attach ( DA FARE DOPO il ->save() )
+            // attach() crea una relazione tra 2 record
             $new_post->tags()->attach($data['tags']);
         }
 
@@ -156,15 +157,17 @@ class PostController extends Controller
 
         // verifico l'esistenza dell'chiave tags (che è un array) DENTRO all'array $post_data
         // SE esite aggiorno le relazioni
-        // se non esiste cancello tutte le relazioni 
+        // se non esiste cancello tutte le relazioni
         if (array_key_exists('tags', $post_data)) {
             // SE esite eseguo il sync ( DA FARE DOPO ->update() )
-            // sync() sostituisce tutte le relazioni con quelle che vengono passate come parametro
+            // sync() sostituisce (quindi elimina e riscrive) tutte le relazioni con quelle che vengono passate come parametro
             $post->tags()->sync($post_data['tags']);
         }else {
             // se non viene inviato nessun tag devo cancellare tutte le relazioni
             $post->tags()->sync([]);
-            // sync() ha la stessa funzione di detach() che però puo eliminare anche solo 1 relazione 
+            // detach() elimina le relazioni tra 2 record
+            // passandogli un parametro elimina SOLO quella relazione
+            // non passandogli NIENTE elimina tutto
             $post->tags()->detach();
         }
 
