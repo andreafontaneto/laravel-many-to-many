@@ -23,6 +23,12 @@ class Post extends Model
 
     }
 
+    public function tags(){
+        // come nella one-to-many si utilizza il metodo belongsTo() per collegare il one al many
+        // nel many-to-many si utilizza il metodo belongsToMany()
+        return $this->belongsToMany('App\Tag');
+    }
+
     // creo una funzione statica (::) per poterla richiamare DOPO nel seeder usando QUESTO Model (Post)
     public static function generateSlug($title){
 
