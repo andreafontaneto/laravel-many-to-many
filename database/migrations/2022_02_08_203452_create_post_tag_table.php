@@ -33,7 +33,7 @@ class CreatePostTagTable extends Migration
                 ->onDelete('cascade');
                 
 
-            $table->timestamps();
+            // $table->timestamps(); non serve
         });
     }
 
