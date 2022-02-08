@@ -22,6 +22,7 @@
             <th scope="col">ID</th>
             <th scope="col">TITOLO</th>
             <th scope="col">CATEGORIA</th>
+            <th scope="col">TAGS</th>
             <th scope="col" colspan="3">AZIONI</th>
           </tr>
         </thead>
@@ -48,6 +49,13 @@
                   {{-- ALTRIMENTI fai un trattino --}}
                   - 
                 @endif
+              </td>
+              <td>
+                @forelse ($post->tags as $tag)
+                  <span class="badge bg-info text-white">{{ $tag->name }}</span>
+                @empty
+                  -
+                @endforelse
               </td>
               <td class="d-flex justify-content-between">
                 <a class="btn btn-success" href="{{ route('admin.posts.show', $post)}}">SHOW</a>

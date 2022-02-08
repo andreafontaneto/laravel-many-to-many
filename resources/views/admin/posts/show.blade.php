@@ -2,14 +2,24 @@
 
 @section('content')
 <div class="container">
-    <div>
+    <div class="mb-5">
       <h1>{{ $post->title }}</h1>
 
       {{-- SE la categoria esiste stampo un badge --}}
       @if ($post->category)
-        <h5><span class="badge bg-secondary">{{ $post->category->name }}</span></h5> 
+        <h5>Categoria: <span class="badge bg-secondary">{{ $post->category->name }}</span></h5> 
       @endif
+
+      {{-- CICLO i tag prensenti SE ESITONO --}}
+      @forelse ($post->tags as $tag)
+        <span class="badge bg-info text-white">{{ $tag->name }}</span>
+      @empty
+        -
+      @endforelse
       
+    </div>
+
+    <div class="mb-5">
       <p>{{ $post->content }}</p>
     </div>
 
